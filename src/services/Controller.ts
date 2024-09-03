@@ -8,19 +8,22 @@ export class Controller<T> {
     private debounceDuration: number;
     private minQueryLength: number;
     private lastQuery: string;
+    private numberOfResults: number;
     private debouncedFetch: (query: string, limit?: number) => Promise<T[]>;
 
     constructor(
         apiUrl: string,
         cache: MemoryCache<T[]>,
         debounceDuration: number = 300,
-        minQueryLength: number = 3
+        minQueryLength: number = 3,
+       numberOfResults: number = 10,
     ) {
         this.apiUrl = apiUrl;
         this.cache = cache;
         this.debounceDuration = debounceDuration;
         this.minQueryLength = minQueryLength;
         this.lastQuery = '';
+        this.numberOfResults = numberOfResults;
         this.debouncedFetch = this.debounce(this.fetchResults.bind(this), debounceDuration);
     }
 
@@ -68,7 +71,7 @@ export class Controller<T> {
 
     public handleInputChange(query: string, updateResultsUI: (results: T[]) => void): void {
         this.lastQuery = query; // Update the last query
-        this.debouncedFetch(query).then(results => {
+        this.debouncedFetch(query, this.numberOfResults).then(results => {
             if (query === this.lastQuery) { // Ensure the results are for the latest query
                 updateResultsUI(results); // Update the UI with the results
             }
