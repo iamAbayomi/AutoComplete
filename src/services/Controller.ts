@@ -16,7 +16,8 @@ export class Controller<T> {
         cache: MemoryCache<T[]>,
         debounceDuration: number = 300,
         minQueryLength: number = 3,
-       numberOfResults: number = 10,
+        numberOfResults: number = 10,
+        apiTimeoutDruration: number = 5000,
     ) {
         this.apiUrl = apiUrl;
         this.cache = cache;
