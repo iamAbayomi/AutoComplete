@@ -20,22 +20,23 @@ interface AutoCompleteProps {
 }
 
 export default function AutoComplete({
-  numberOfResults,
   apiUrl,
   debounceDuration,
   minQueryLength,
   apiTimeoutDuration,
-  cacheDuration
+  cacheDuration,
+  numberOfResults
 }: AutoCompleteProps) {
   const [results, setResults] = useState<ResultType[]>([]);
-  const cache = new MemoryCache<ResultType[]>();
+  const cache = new MemoryCache<ResultType[]>(cacheDuration);
   // Initialize the controller with the API URL and cache
   const controller = new Controller<ResultType>(
     apiUrl,
     cache,
     debounceDuration,
     minQueryLength,
-    numberOfResults
+    numberOfResults,
+    apiTimeoutDuration
   );
 
   const updateResultsUI = (results: ResultType[]) => {
